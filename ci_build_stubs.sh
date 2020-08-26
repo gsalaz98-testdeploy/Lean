@@ -107,7 +107,9 @@ function push_to_github {
     fi
 }
 
-if [[ "$TRAVIS_BRANCH" != "master" ]] || [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
+CURRENT_BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
+
+if [[ "$CURRENT_BRANCH" != "master" ]]; then
     exit 0
 fi
 if [[ " ${GENERATOR_CLI_ARGS[@]} " =~ " -ipy " ]]; then
