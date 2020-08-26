@@ -107,10 +107,8 @@ function push_to_github {
     fi
 }
 
-if [[ "$TRAVIS_BRANCH" != "" ]]; then
-    if [[ "$TRAVIS_BRANCH" != "master" ]] || [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
-        exit 0
-    fi
+if [[ "$TRAVIS_BRANCH" != "master" ]] || [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
+    exit 0
 fi
 if [[ " ${GENERATOR_CLI_ARGS[@]} " =~ " -ipy " ]]; then
     install_ironpython
