@@ -119,7 +119,7 @@ function push_to_github {
     local stubs_version_number=$(echo "$stubs_version_number_response" | jq .data.repository.refs.nodes[0].name | sed -s 's/"//g')
 
     zip -r stubs.zip ./Algorithm.Python/stubs/
-    aws s3 cp stubs.zip "s3://gerrys-club/stubs/stubs_v$stubs_version_number.zip" >/dev/null 2>&1
+    aws s3 cp stubs.zip "s3://gerrys-club/stubs/stubs_v$stubs_version_number.zip"
 
     if [ $? -ne 0 ]; then
         echo "Pushing stubs to s3 failed"
