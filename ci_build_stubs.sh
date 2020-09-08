@@ -117,9 +117,10 @@ function push_to_github {
     local tag_graphql_query='{ "query": "query { repository(name: \"Lean\", owner: \"QuantConnect\") { refs(refPrefix: \"refs/tags/\", first: 1, orderBy: { field: TAG_COMMIT_DATE, direction: DESC }) { nodes { name } } } }" }'
     local stubs_version_number_response=$(curl -s -H "Authorization: bearer $GH_API_KEY" -X POST --data-raw "$tag_graphql_query" https://api.github.com/graphql 2>/dev/null)
     local stubs_version_number=$(echo "$stubs_version_number_response" | jq .data.repository.refs.nodes[0].name | sed -s 's/"//g')
+    local s3_bucket="gerrys-club"
 
     zip -r stubs.zip ./Algorithm.Python/stubs/
-    aws s3 cp stubs.zip "s3://cdn.quantconnect.com/stubs/stubs_v$stubs_version_number.zip"
+    aws s3 cp stubs.zip "s3://$s3_bucket/stubs/stubs_v$stubs_version_number.zip"
 
     if [ $? -ne 0 ]; then
         echo "Pushing stubs to s3 failed"
@@ -127,7 +128,7 @@ function push_to_github {
     fi
 
     echo "stubs_v$stubs_version_number.zip" > stubs_release.txt
-    aws s3 cp stubs_release.txt "s3://cdn.quantconnect.com/stubs/stubs_release.txt"
+    aws s3 cp stubs_release.txt "s3://$s3_bucket/stubs/stubs_release.txt"
 }
 
 CURRENT_BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
