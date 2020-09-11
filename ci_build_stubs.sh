@@ -100,7 +100,7 @@ function push_to_github {
         local tag_graphql_query='{ "query": "query { repository(name: \"Lean\", owner: \"QuantConnect\") { refs(refPrefix: \"refs/tags/\", first: 1, orderBy: { field: TAG_COMMIT_DATE, direction: DESC }) { nodes { name } } } }" }'
         local stubs_version_number_response=$(curl -s -H "Authorization: bearer $GH_API_KEY" -X POST --data-raw "$tag_graphql_query" https://api.github.com/graphql 2>/dev/null)
         local stubs_version_number=$(echo "$stubs_version_number_response" | jq .data.repository.refs.nodes[0].name | sed -s 's/"//g')
-        local s3_bucket="skylight.quantconnect.com"
+        local s3_bucket="gerrys-club"
 
         cd ./Algorithm.Python/stubs/
         zip -r stubs.zip QuantConnect/
